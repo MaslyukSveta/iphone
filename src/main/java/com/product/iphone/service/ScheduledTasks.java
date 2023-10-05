@@ -15,6 +15,9 @@ public class ScheduledTasks {
     @Autowired
     private OrderRepository orderRepository;
 
+    /**
+     * Scheduled task to delete unpaid orders older than 10 minutes.
+     */
     @Scheduled(fixedRate = 600000)
     public void deleteUnpaidOrders() {
         LocalDateTime threshold = LocalDateTime.now().minusMinutes(10);

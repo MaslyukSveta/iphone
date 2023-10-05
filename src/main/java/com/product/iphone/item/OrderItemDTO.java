@@ -15,7 +15,7 @@ public class OrderItemDTO {
         this.quantity = quantity;
     }
 
-    // Getters and Setters
+
     public Long getProductId() {
         return productId;
     }
@@ -32,7 +32,7 @@ public class OrderItemDTO {
         this.quantity = quantity;
     }
 
-    // ToString method for better debugging (optional)
+
     @Override
     public String toString() {
         return "OrderItemDTO{" +

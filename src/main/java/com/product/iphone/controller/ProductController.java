@@ -17,7 +17,11 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-
+    /**
+     * Retrieve a list of all products.
+     *
+     * @return A ResponseEntity containing a list of products or a NO_CONTENT response if empty.
+     */
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
         try {
@@ -30,12 +34,24 @@ public class ProductController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * Retrieve a product by its unique ID.
+     *
+     * @param id The ID of the product to retrieve.
+     * @return The requested product if found, or throw a RuntimeException if not found.
+     */
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable Long id) {
         return productService.getProductById(id).orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
-
+    /**
+     * Add a new product to the database.
+     *
+     * @param product The product to be added. Should be a valid Product object.
+     * @return A ResponseEntity containing the saved product with a CREATED status, or an INTERNAL_SERVER_ERROR response if an error occurs.
+     */
     @PostMapping("/add")
     public ResponseEntity<Product> addProduct(@Valid @RequestBody Product product) {
         try {

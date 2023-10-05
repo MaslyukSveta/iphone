@@ -27,6 +27,12 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
+    /**
+     * Places an order based on a request containing order items.
+     *
+     * @param request The CreateOrderRequest containing order item details.
+     * @return The created order.
+     */
     public Order placeOrder(CreateOrderRequest request) {
         Order order = new Order();
         order.setCreated(LocalDateTime.now());
@@ -43,13 +49,24 @@ public class OrderService {
 
         return orderRepository.save(order);
     }
+    /**
+     * Places an order based on an existing Order object.
+     *
+     * @param order The Order object to be saved as an order.
+     * @return The created order.
+     */
     @Transactional
     public Order placeOrder(Order order) {
         order.setCreated(LocalDateTime.now());
         return orderRepository.save(order);
     }
 
-
+    /**
+     * Marks an order as paid by updating its status in the database.
+     *
+     * @param orderId The ID of the order to be marked as paid.
+     * @throws Exception If the order is not found or is already paid.
+     */
     public void payOrder(Long orderId) throws Exception {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
@@ -64,13 +81,17 @@ public class OrderService {
             throw new Exception("Order not found");
         }
     }
-
+    /**
+     * Scheduled method to delete unpaid orders older than 10 minutes.
+     */
     @Scheduled(fixedRate = 600000)
     public void deleteUnpaidOrders() {
         List<Order> unpaidOrders = orderRepository.findAllByPaidFalseAndCreatedBefore(LocalDateTime.now().minusMinutes(10));
         orderRepository.deleteAll(unpaidOrders);
     }
-
+    /**
+     * Scheduled method to delete unpaid orders older than 10 minutes (alternative implementation).
+     */
     @Scheduled(fixedRate = 600000)
     public void deleteUnpaidOrders1() {
         LocalDateTime threshold = LocalDateTime.now().minusMinutes(10);

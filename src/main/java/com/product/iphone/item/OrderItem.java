@@ -9,6 +9,8 @@ import jakarta.persistence.*;
 @Table(name = "order_items")
 public class OrderItem {
 
+    // Fields
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,14 +29,17 @@ public class OrderItem {
     @Column(nullable = false)
     private double totalCost;
 
+
+
     public OrderItem() {
     }
 
     public OrderItem(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
-        this.totalCost = product.getPrice() * quantity;
+        computeTotalCost();
     }
+
 
 
     public Long getId() {
@@ -75,6 +80,7 @@ public class OrderItem {
         return totalCost;
     }
 
+
     private void computeTotalCost() {
         if (this.product != null) {
             this.totalCost = this.product.getPrice() * this.quantity;
@@ -82,6 +88,4 @@ public class OrderItem {
             this.totalCost = 0;
         }
     }
-
-
 }

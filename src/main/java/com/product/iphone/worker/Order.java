@@ -11,6 +11,8 @@ import java.util.List;
 @Table(name = "orders")
 public class Order {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,18 +29,25 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order", orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+
+
     public Order() {
         this.created = LocalDateTime.now();
         this.paid = false;
         this.totalAmount = 0;
     }
+
+
+
     @PrePersist
     protected void onCreate() {
         if (created == null) {
             created = LocalDateTime.now();
         }
-
     }
+
+
+
     private List<OrderItem> items = new ArrayList<>();
 
     public List<OrderItem> getItems() {
@@ -48,7 +57,6 @@ public class Order {
     public void setItems(List<OrderItem> items) {
         this.items = items;
     }
-
 
 
 
@@ -80,8 +88,9 @@ public class Order {
         return orderItems;
     }
 
+
     public void addOrderItem(OrderItem orderItem) {
-        if(orderItem != null) {
+        if (orderItem != null) {
             orderItems.add(orderItem);
             orderItem.setOrder(this);
             totalAmount += orderItem.getProduct().getPrice() * orderItem.getQuantity();
@@ -89,11 +98,13 @@ public class Order {
     }
 
     public void removeOrderItem(OrderItem orderItem) {
-        if(orderItem != null) {
+        if (orderItem != null) {
             orderItems.remove(orderItem);
             totalAmount -= orderItem.getProduct().getPrice() * orderItem.getQuantity();
         }
     }
+
+
 
     public void setCreated(LocalDateTime now) {
         if (this.created == null) {
@@ -102,7 +113,4 @@ public class Order {
             throw new IllegalStateException("Creation time can't be reset.");
         }
     }
-
-
-
 }
